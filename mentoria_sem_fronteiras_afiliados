@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programa de Afiliados - Mentoria Sem Fronteiras</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Partículas animadas */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #3b82f6;
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.7; }
+            50% { transform: translateY(-20px) translateX(10px); opacity: 1; }
+        }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Botões */
+        .btn {
+            padding: 16px 32px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: rgba(59, 130, 246, 0.3);
+            color: white;
+            border: 1px solid rgba(59, 130, 246, 0.5);
+        }
+
+        .btn-primary:hover {
+            background: rgba(59, 130, 246, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-whatsapp {
+            background: #25d366;
+            color: white;
+        }
+
+        .btn-whatsapp:hover {
+            background: #20b358;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            padding: 100px 0;
+            background: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #ffffff, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: #cbd5e1;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Seções */
+        .section {
+            padding: 100px 0;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 60px;
+            color: #ffffff;
+        }
+
+        /* Cards de Comissão */
+        .commission-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .commission-card {
+            padding: 40px 30px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .commission-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .commission-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 24px;
+        }
+
+        .commission-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #3b82f6;
+        }
+
+        .commission-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #10b981;
+            margin-bottom: 12px;
+        }
+
+        .commission-estimate {
+            color: #cbd5e1;
+            margin-bottom: 30px;
+        }
+
+        /* Como Divulgar */
+        .divulgar-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .strategy-list {
+            list-style: none;
+        }
+
+        .strategy-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .strategy-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .strategy-text h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #ffffff;
+        }
+
+        .strategy-text p {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+        }
+
+        /* Vantagens */
+        .advantages-card {
+            padding: 50px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(29, 78, 216, 0.05));
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .advantages-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .advantage-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .advantage-icon {
+            width: 40px;
+            height: 40px;
+            background: #10b981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .advantage-text {
+            font-size: 1.1rem;
+            color: #e2e8f0;
+        }
+
+        /* CTA Final */
+        .cta-final {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1e3a8a 100%);
+            text-align: center;
+            padding: 100px 0;
+        }
+
+        .cta-final h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, #ffffff, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-large {
+            padding: 20px 40px;
+            font-size: 1.2rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .footer p {
+            color: #cbd5e1;
+            margin-bottom: 20px;
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .divulgar-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .hero-buttons, .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .commission-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .advantages-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Partículas animadas -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Ganhe comissões indicando alunos para a Mentoria Sem Fronteiras</h1>
+            <p>Você pode vender pelo tráfego pago ou em grupos de Telegram e WhatsApp.</p>
+            <div class="hero-buttons">
+                <a href="https://api.whatsapp.com/send?phone=5521976558885&text=Ol%C3%A1%2C%20quero%20ser%20vendedor%20de%20voc%C3%AA%21" class="btn btn-primary">
+                    Quero me tornar vendedor
+                </a>
+                <a href="https://api.whatsapp.com/send?phone=5521976558885&text=Ol%C3%A1%2C%20quero%20ser%20vendedor%20de%20voc%C3%AA%21" class="btn btn-whatsapp">
+                    <span>📱</span> Falar no WhatsApp
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Como Funciona a Comissão -->
+    <section class="section">
+        <div class="container">
+            <h2>Como Funciona a Comissão</h2>
+            <div class="commission-cards">
+                <div class="commission-card glass">
+                    <div class="commission-icon">💎</div>
+                    <h3>Plano Flexível</h3>
+                    <div class="commission-value">R$50-R$125</div>
+                    <p class="commission-estimate">por aluno</p>
+                    <p class="commission-estimate">Receita estimada: R$600-R$1.500/mês (12 alunos)</p>
+                    <a href="https://api.whatsapp.com/send?phone=5521976558885&text=Ol%C3%A1%2C%20quero%20ser%20vendedor%20de%20voc%C3%AA%21" class="btn btn-whatsapp">
+                        <span>📱</span> Quero vender este plano
+                    </a>
+                </div>
+                
+                <div class="commission-card glass">
+                    <div class="commission-icon">👑</div>
+                    <h3>Mentoria Prime</h3>
+                    <div class="commission-value">R$200</div>
+                    <p class="commission-estimate">por aluno</p>
+                    <p class="commission-estimate">Receita estimada: R$2.400/mês (12 alunos)</p>
+                    <a href="https://api.whatsapp.com/send?phone=5521976558885&text=Ol%C3%A1%2C%20quero%20ser%20vendedor%20de%20voc%C3%AA%21" class="btn btn-whatsapp">
+                        <span>📱</span> Quero vender este plano
+                    </a>
+                </div>
+                
+                <div class="commission-card glass">
+                    <div class="commission-icon">🚀</div>
+                    <h3>Mentoria Júnior</h3>
+                    <div class="commission-value">R$40</div>
+                    <p class="commission-estimate">por aluno</p>
+                    <p class="commission-estimate">Receita estimada: R$480/mês (12 alunos)</p>
+                    <a href="https://api.whatsapp.com/send?phone=5521976558885&text=Ol%C3%A1%2C%20quero%20ser%20vendedor%20de%20voc%C3%AA%21" class="btn btn-whatsapp">
+                        <span>📱</span> Quero vender este plano
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Como Divulgar e Vender -->
+    <section class="section">
+        <div class="container">
+            <h2>Como Divulgar e Vender</h2>
+            <div class="divulgar-content">
+                <div>
+                    <ul class="strategy-list">
+                        <li class="strategy-item">
+                            <div class="strategy-icon">🎯</div>
+                            <div class="strategy-text">
+                                <h4>Tráfego Pago</h4>
+                                <p>Use Facebook Ads, Google Ads e Instagram para alcançar seu público-alvo com precisão.</p>
+                            </div>
+                        </li>
+                        <li class="strategy-item">
+                            <div class="strategy-icon">💬</div>
+                            <div class="strategy-text">
+                                <h4>Grupos de WhatsApp e Telegram</h4>
+                                <p>Compartilhe em grupos relacionados a educação, empreendedorismo e desenvolvimento pessoal.</p>
+                            </div>
+                        </li>
+                        <li class="strategy-item">
+                            <div class="strategy-icon">🤝</div>
+                            <div class="strategy-text">
+                                <h4>Networking Pessoal</h4>
+                                <p>Indique para amigos, familiares e conhecidos que buscam crescimento profissional.</p>
+                            </div>
+                        </li>
+                    </ul>
+                    <div style="margin-top: 40px;">
+                        <a href="https://api.whatsapp.com/send?phone=5521976558885&text=Ol%C3%A1%2C%20quero%20ser%20vendedor%20de%20voc%C3%AA%21" class="btn btn-whatsapp btn-large">
+                            <span>📱</span> Quero aprender como divulgar
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <div style="text-align: center; font-size: 8rem; opacity: 0.3;">📈</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vantagens para o Vendedor -->
+    <section class="section">
+        <div class="container">
+            <h2>Vantagens para o Vendedor</h2>
+            <div class="advantages-card glass">
+                <ul class="advantages-list">
+                    <li class="advantage-item">
+                        <div class="advantage-icon">💰</div>
+                        <div class="advantage-text">Ganhos mensais recorrentes com cada indicação aprovada</div>
+                    </li>
+                    <li class="advantage-item">
+                        <div class="advantage-icon">📊</div>
+                        <div class="advantage-text">Comissões claras e transparentes sem pegadinhas</div>
+                    </li>
+                    <li class="advantage-item">
+                        <div class="advantage-icon">🎯</div>
+                        <div class="advantage-text">Suporte completo da nossa equipe especializada</div>
+                    </li>
+                    <li class="advantage-item">
+                        <div class="advantage-icon">🚀</div>
+                        <div class="advantage-text">Total liberdade para divulgar onde e como quiser</div>
+                    </li>
+                </ul>
+                <div style="text-align: center; margin-top: 40px;">
+                    <a href="https://api.whatsapp.com/send?phone=5521976558885&text=Ol%C3%A1%2C%20quero%20ser%20vendedor%20de%20voc%C3%AA%21" class="btn btn-whatsapp btn-large">
+                        <span>📱</span> Falar com Suporte no WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Final -->
+    <section class="cta-final">
+        <div class="container">
+            <h2>Comece hoje mesmo a ganhar com a Mentoria Sem Fronteiras</h2>
+            <div class="cta-buttons">
+                <a href="https://api.whatsapp.com/send?phone=5521976558885&text=Ol%C3%A1%2C%20quero%20ser%20vendedor%20de%20voc%C3%AA%21" class="btn btn-primary btn-large">
+                    Quero ser vendedor agora
+                </a>
+                <a href="https://api.whatsapp.com/send?phone=5521976558885&text=Ol%C3%A1%2C%20quero%20ser%20vendedor%20de%20voc%C3%AA%21" class="btn btn-whatsapp btn-large">
+                    <span>📱</span> Entrar em contato pelo WhatsApp
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>Este é um conteúdo da Mentoria Sem Fronteiras.</p>
+            <a href="https://api.whatsapp.com/send?phone=5521976558885&text=Ol%C3%A1%2C%20quero%20ser%20vendedor%20de%20voc%C3%AA%21" class="btn btn-whatsapp">
+                <span>📱</span> Fale conosco no WhatsApp
+            </a>
+        </div>
+    </footer>
+
+    <script>
+        // Criar partículas animadas
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Efeito de brilho nos botões
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.style.position = 'absolute';
+                ripple.style.borderRadius = '50%';
+                ripple.style.background = 'rgba(255, 255, 255, 0.3)';
+                ripple.style.transform = 'scale(0)';
+                ripple.style.animation = 'ripple 0.6s linear';
+                ripple.style.pointerEvents = 'none';
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Animação de scroll suave
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Inicializar partículas
+        createParticles();
+
+        // Adicionar CSS para animação de ripple
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
